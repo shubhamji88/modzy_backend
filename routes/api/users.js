@@ -10,7 +10,9 @@ const validateLoginInput = require("../../validation/login");
 const getSummart = require('../../funtions/getSummarizedText')
 // Load User model
 const User = require("../../models/UserSchema");
+const UserData = require("../../models/UserDataSchema");
 const getSummarizedText = require("../../funtions/getSummarizedText");
+const UserSchema = require("../../models/UserSchema");
 
 // @route POST api/users/register
 // @desc Register user
@@ -106,14 +108,36 @@ router.post("/login",(req,res) => {
       });
     });
 });
-router.get("/me", auth, async (req, res) => {
+router.post("/add", auth, async (req, res) => {
     try {
-        let result = await getSummarizedText('Modzy is good');
+        let userData = new UserData({
+            useid: req.userId,
+            date : req.date,
+            meetlink: req.meetlink,
+            status: 0
+        })
+        userData.save()
+                    .then(user => res.json({status :200,message:'saved'}))
+                    .catch(err => {console.log(err)
+                        res.json({status :400,message:'error'})
+                    });
+        // let result = await getSummarizedText('Modzy is good');
     //   const user = await User.findById(req.userId);
-      res.json(result);
+    //   res.json(result);
     } catch (e) {
-        
-      res.send({ message: "Error in Fetching user" });
+      res.send({ message: "Error" });
     }
-  });
+});
+router.get("/getDetails", auth, async (req, res) => {
+    try {
+        UserSchema.findOne({id: req.id}).then(userData=>{
+            if(userData.status ==0){
+                return res.status(404).json({ message: "Data Still processing" });
+            }
+        })
+    } catch (e) {
+      res.send({ message: "Error" });
+    }
+});
+
 module.exports = router;
