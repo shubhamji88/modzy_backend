@@ -37,7 +37,7 @@ def commands():
     mom=[]
     foulLangUser=[]
     time.sleep(2)
-    driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Hi! I'm Hirav, your Gmeet companion. Use '/help' to read all my commands" + Keys.ENTER)
+    driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Hi i am modzy bot!!\nType '/help' to see all commands" + Keys.ENTER)
     #infinite loop
     while(key==1):
         time.sleep(1)
@@ -51,29 +51,47 @@ def commands():
             driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys(str(nameFoulUser)+", please don't make use of inappropriate language." + Keys.ENTER)
             i+=2
             print(' Foul message',i,j)
-        elif(instText.find('mom/')!=-1):
+        elif(instText=='/help'):
+            driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("1. /mom: To add text to MOM\n /mom (text to be added)\n2. /seemom: to see MOM \n3. /defaulters: to see defaulter list\n4. /save : to see save the MOM"+ Keys.ENTER)
+            i=i+2
+        elif(instText.find('/mom')!=-1):
             mom.append(str(instText[4:]))
             driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Added to MOM"+ Keys.ENTER)
             i=i+2
-        elif(instText=='save'):
+        elif(instText=='/save'):
             finalMOM = "" 
             for ele in mom: 
-                finalMOM += ele  
-            driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Final MOM: \n"+finalMOM+ Keys.ENTER)
+                finalMOM += ele 
             allFoulLangUser = ""
-            for user in mom: 
-                finalMOM += str(user)+',' 
+            for user in foulLangUser: 
+                finalMOM += str(user)+','  
+            driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Final MOM: \n"+finalMOM+"\n Defaulter list: "+allFoulLangUser+ Keys.ENTER)
+            i=i+2
             saveMOM(finalMOM,allFoulLangUser,sys.argv[0],sys.argv[1])
+        elif(instText=='/seemom'):
+            tempMOM = "" 
+            for ele in mom: 
+                tempMOM += ele  
+            driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("MOM: \n"+tempMOM+ Keys.ENTER)
+            i=i+2
+        elif(instText=='/defaulters'):
+            tempFoulLangUser = ""
+            for user in foulLangUser: 
+                tempFoulLangUser += str(user)+','  
+            driver.find_element(By.XPATH,'//textarea[@name="chatTextInput"]').send_keys("Defaulter list: "+tempFoulLangUser+ Keys.ENTER)
+            i=i+2
         else:
             i+=1
 
 # login()
 Glogin(CREDS['email'], CREDS['passwd'],driver)
-driver.get("https://meet.google.com/ahc-kngz-iqu")
-# time.sleep(5)
+time.sleep(2)
+driver.get("https://meet.google.com/oqu-jxqo-bkt")
+# 
 # turnOffMicCam(driver)
 # driver.implicitly_wait(15)
-joinNow(driver)
+# joinNow(driver)
+AskToJoin(driver)
 driver.implicitly_wait(10)
 time.sleep(5)
 commands()

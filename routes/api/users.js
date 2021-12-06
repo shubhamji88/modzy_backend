@@ -154,14 +154,14 @@ const markle = async function makeTree () {
       completed: true 
     }
   };
-function start(){
+async function start(){
     return new Promise(resolve => {
         markle()
         resolve('ok')
     })
     console.log('ok');
 }
-// start();
+start();
 // router.get('/startBot',async (req, res) => {
     
 // })
