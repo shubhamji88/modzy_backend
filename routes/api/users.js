@@ -13,6 +13,8 @@ const User = require("../../models/UserSchema");
 const UserData = require("../../models/UserDataSchema");
 const getSummarizedText = require("../../funtions/getSummarizedText");
 const UserSchema = require("../../models/UserSchema");
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec)
 
 // @route POST api/users/register
 // @desc Register user
@@ -96,7 +98,8 @@ router.post("/login",(req,res) => {
                 (err, token) => {
                 res.json({
                     success: true,
-                    token: "Bearer " + token
+                    token: "Bearer " + token,
+                    name: user.name
                 });
                 }
             );
@@ -139,5 +142,27 @@ router.get("/getDetails", auth, async (req, res) => {
       res.send({ message: "Error" });
     }
 });
-
+router.post('/addMeetingData',async (req, res) => {
+    console.log(req.body.id+req.body.mom+req.body.fUser)
+    res.send({ message: "ok" })
+})
+const markle = async function makeTree () {
+    // Exec output contains both stderr and stdout outputs
+    await exec('python .\\gbot\\main.py')
+  
+    return { 
+      completed: true 
+    }
+  };
+function start(){
+    return new Promise(resolve => {
+        markle()
+        resolve('ok')
+    })
+    console.log('ok');
+}
+// start();
+// router.get('/startBot',async (req, res) => {
+    
+// })
 module.exports = router;
