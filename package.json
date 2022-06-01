@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "@modzy/modzy-sdk": "^1.0.7",
-    "bcryptjs": "999999",
+    "bcryptjs": "999999"
   }
 }
